@@ -1,6 +1,6 @@
 "use client"
 import {ChangeEvent, useEffect, useState} from "react";
-import {Autocomplete, Box, Button, FormControl, FormHelperText, Grid, TextField} from "@mui/material";
+import {Autocomplete, Box, Button, FormControl, FormHelperText, Grid, TextField, Typography} from "@mui/material";
 import axios, {AxiosResponse} from "axios";
 import {Card} from "../register/index";
 import Image from 'next/image';
@@ -34,14 +34,12 @@ const Page = () => {
             value: [],
             error: false,
             errorMessage: 'This field is required'
-        },
-        terms: {
-            value: false,
-            error: false,
-            errorMessage: 'Please check this box if you want to proceed'
-        },
-        options: []
-    })
+        }
+    });
+
+    const [label, setLabel] = useState('');
+
+    const [options, setOptions] = useState([]);
 
     const user: any = useAppSelector((state) => state.rootReducer);
     const dispatch = useAppDispatch();
@@ -62,9 +60,10 @@ const Page = () => {
 
                             const array_of_sectors: any = arrayOfUserSectors(response);
 
+                            setOptions(response[1].data.data);
+
                             setFormValues({
                                 ...formValues,
-                                options: response[1].data.data,
                                 name: {
                                     ...formValues.name,
                                     value: response[0].data.data.name
@@ -101,15 +100,52 @@ const Page = () => {
         });
     }
 
+    const isValid = (formValues: any) => {
+        const formFields = Object.keys(formValues);
+        let newFormValues = {...formValues};
+        let errorState = true;
+
+        for (let index = 0; index < formFields.length; index++) {
+            const currentField = formFields[index];
+            const currentValue = formValues[currentField].value;
+
+            if (!currentValue || (Array.isArray(currentValue) && currentValue.length === 0)) {
+                newFormValues = {
+                    ...newFormValues,
+                    [currentField]: {
+                        ...newFormValues[currentField],
+                        error: true
+                    }
+                }
+                errorState = false;
+            }
+        }
+
+        setFormValues(newFormValues);
+
+        return errorState;
+    }
+
     const handleSubmit = async (event: any) => {
         event.preventDefault();
-        await fetch(`/api/users/${user.auth.id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formValues),
-        });
+        if (!isValid(formValues)) {
+            return false;
+        }else {
+            setLabel('updating');
+            await fetch(`/api/users/${user.auth.id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formValues),
+            });
+
+            setLabel('updated successfully');
+
+            setTimeout(() => {
+                setLabel('');
+            }, 2500)
+        }
     }
 
     const logout = () => {
@@ -177,7 +213,7 @@ const Page = () => {
                                             id="grouped-demo"
                                             defaultValue={formValues.sectors.value}
                                             value={formValues.sectors.value}
-                                            options={formValues.options}
+                                            options={options}
                                             groupBy={(option) => option.Sector.name}
                                             getOptionLabel={(option) => option.name}
                                             onChange={onChange}
@@ -190,9 +226,22 @@ const Page = () => {
                                     </FormControl>
                                 </Box>
                                 <Box component="div">
-                                    <Button variant="outlined" type='submit'>Update</Button>
+                                    <Button
+                                        variant="outlined"
+                                        type='submit'
+                                    >Update</Button>
                                     <Button variant="outlined" onClick={logout}>Logout</Button>
                                 </Box>
+                            </Box>
+                            <Box>
+                                <Typography
+                                    component={"div"}
+                                    fontSize={12}
+                                    color={'darkred'}
+                                    marginY={2}
+                                >
+                                    {label}
+                                </Typography>
                             </Box>
                         </Grid>
                     </Grid>
