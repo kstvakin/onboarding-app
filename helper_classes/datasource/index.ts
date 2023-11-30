@@ -1,11 +1,5 @@
 export const add = async (entity: any, data: any) => {
-
-    const user = await findOne(entity, {name: data.name});
-
-    if (!user) {
-        return entity.create(data);
-    }
-    return user;
+    return entity.create(data);
 }
 
 export const edit = async (entity: any, data: any) => {

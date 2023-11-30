@@ -36,7 +36,6 @@ const Page = () => {
     useEffect(() => {
         axios(`/api/sectors`)
             .then(response => {
-                console.log(response.data)
                 setOptions(response.data.data)
             });
 
