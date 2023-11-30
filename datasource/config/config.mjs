@@ -5,7 +5,7 @@ const Configuration =  {
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME,
         host: process.env.DB_HOSTNAME,
-        port: 3306,
+        port: process.env.DB_PORT,
         dialect: 'mysql',
         dialectModule: mysql2,
         logging:false
