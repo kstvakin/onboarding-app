@@ -167,9 +167,12 @@ const Page = () => {
                                             name="name"
                                             onChange={updateFormState}
                                         />
-                                        <FormHelperText>{
-
-                                        }</FormHelperText>
+                                        <FormHelperText>
+                                            {
+                                                String(formValues.name.error) === 'true' ?
+                                                    formValues.name.errorMessage : ''
+                                            }
+                                        </FormHelperText>
                                     </FormControl>
                                 </Box>
                                 <Box component="div" marginBottom={3}>
@@ -186,14 +189,18 @@ const Page = () => {
                                             renderInput={(params) =>
                                                 <TextField {...params} label="Sectors"/>}
                                         />
-                                        <FormHelperText>{
-
-                                        }</FormHelperText>
+                                        <FormHelperText>
+                                            {
+                                                String(formValues.sectors.error) === 'true' ?
+                                            formValues.sectors.errorMessage : ''
+                                        }
+                                        </FormHelperText>
                                     </FormControl>
                                 </Box>
                                 <Box component="div" marginBottom={3}>
                                     <FormControl fullWidth
-                                                 error={formValues.terms.error}>
+                                                 error={formValues.terms.error}
+                                    >
                                         <FormControlLabel control={
                                             <Checkbox
                                                 name="terms"
@@ -201,7 +208,8 @@ const Page = () => {
                                                 onChange={updateFormState}/>
                                         } label="Agree to terms"/>
                                         <FormHelperText>{
-
+                                            String(formValues.terms.error) === 'true' ?
+                                                formValues.terms.errorMessage : ''
                                         }</FormHelperText>
                                     </FormControl>
                                 </Box>

@@ -5,7 +5,7 @@ import axios, {AxiosResponse} from "axios";
 import {Card} from "../register/index";
 import Image from 'next/image';
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import { reset } from "../../redux/userSlice";
+import {reset} from "../../redux/userSlice";
 import {useRouter} from "next/navigation";
 
 
@@ -47,9 +47,9 @@ const Page = () => {
 
     useEffect(() => {
 
-        if(!user.auth.auth){
+        if (!user.auth.auth) {
             router.push('/');
-        }else {
+        } else {
 
             Promise.all([
                 axios(`/api/users/${user.auth.id}`),
@@ -130,7 +130,7 @@ const Page = () => {
         event.preventDefault();
         if (!isValid(formValues)) {
             return false;
-        }else {
+        } else {
             setLabel('updating');
             await fetch(`/api/users/${user.auth.id}`, {
                 method: 'POST',
@@ -177,12 +177,12 @@ const Page = () => {
                                       justifyContent="center"
                                 >
                                     <Grid item>
-                                <Image
-                                    src="/assets/avatar-profile.svg"
-                                    width={100}
-                                    height={50}
-                                    alt={"profile"}
-                                />
+                                        <Image
+                                            src="/assets/avatar-profile.svg"
+                                            width={100}
+                                            height={50}
+                                            alt={"profile"}
+                                        />
                                     </Grid>
                                 </Grid>
                             </Box>
@@ -193,7 +193,10 @@ const Page = () => {
                                 onSubmit={handleSubmit}
                             >
                                 <Box component="div" marginBottom={3}>
-                                    <FormControl fullWidth>
+                                    <FormControl
+                                        fullWidth
+                                        error={formValues.name.error}
+                                    >
                                         <TextField
                                             id="name"
                                             label="Name"
@@ -203,11 +206,17 @@ const Page = () => {
                                             error={formValues.name.error}
                                             onChange={editFormState}
                                         />
+                                        <FormHelperText>{
+                                            String(formValues.name.error) === 'true' ?
+                                                formValues.name.errorMessage : ''
+                                        }</FormHelperText>
                                     </FormControl>
                                 </Box>
                                 <Box component="div" marginBottom={3}>
-                                    <FormControl fullWidth
-                                                 error={formValues.sectors.error}>
+                                    <FormControl
+                                        fullWidth
+                                        error={formValues.sectors.error}
+                                    >
                                         <Autocomplete
                                             multiple={true}
                                             id="grouped-demo"
@@ -221,7 +230,8 @@ const Page = () => {
                                                 <TextField {...params} label="Sectors"/>}
                                         />
                                         <FormHelperText>{
-                                            formValues.sectors.error ? formValues.sectors.errorMessage : ''
+                                            String(formValues.sectors.error) === 'true' ?
+                                                formValues.sectors.errorMessage : ''
                                         }</FormHelperText>
                                     </FormControl>
                                 </Box>
