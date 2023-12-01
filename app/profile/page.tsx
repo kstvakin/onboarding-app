@@ -28,6 +28,10 @@ type Effects = {
     label: string
 }
 
+type User = {
+    auth: Record<string, any>
+}
+
 const Page = () => {
     const router = useRouter();
     const [formValues, setFormValues] = useState<any>({
@@ -50,11 +54,13 @@ const Page = () => {
 
     const [options, setOptions] = useState([]);
 
-    const user: any = useAppSelector((state) => state.rootReducer);
+    const user: User = useAppSelector((state) => state.rootReducer) as User;
     const dispatch = useAppDispatch();
 
 
     useEffect(() => {
+
+        console.log('firing')
 
         if (!user.auth.auth) {
             router.push('/');
@@ -85,7 +91,7 @@ const Page = () => {
                         })
                 });
         }
-    }, [])
+    }, [user])
 
 
     const editFormState = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -169,7 +175,6 @@ const Page = () => {
 
     const logout = () => {
         dispatch(reset());
-        router.push('/');
     }
 
     return (
@@ -254,7 +259,7 @@ const Page = () => {
                                         }</FormHelperText>
                                     </FormControl>
                                 </Box>
-                                <Box component="div" sx={{marginBottom:2, position: 'relative'}}>
+                                <Box component="div" sx={{marginBottom: 2, position: 'relative'}}>
                                     <LoadingButton
                                         variant="outlined"
                                         type='submit'
