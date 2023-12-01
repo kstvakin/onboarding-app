@@ -1,9 +1,9 @@
-import {edit, findOne} from "../../../../helper_classes/datasource/index";
+import {DBActions} from "../../../../helper_classes/datasource/index";
 import {User} from "../../../../datasource/entities/index";
 interface PostBody{
     name: string,
     sectors: string,
-    id: number
+    id: string
 }
 
 export async function GET(
@@ -12,7 +12,8 @@ export async function GET(
     ) {
     try {
         const userId = params.user;
-        const user = await findOne(User, {id: userId});
+        const dbActions: DBActions = DBActions.getInstance();
+        const user = await dbActions.findOne(User, {id: userId});
         return Response.json({data: user})
     }catch (e) {
         console.error(e);
@@ -26,12 +27,13 @@ export async function POST(
 ) {
     try {
         const {name, sectors} = await req.json();
-        const postBody = {
+        const postBody: PostBody = {
             name: String(name.value).toLowerCase(),
             sectors: sectors.value.map((el:any)=> el.name).join(','),
             id: params.user
-        }
-        await edit(User, postBody);
+        };
+        const dbActions: DBActions = DBActions.getInstance();
+        await dbActions.edit(User, postBody);
         return Response.json({data: postBody});
     }catch (e) {
         console.error(e);

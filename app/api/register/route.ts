@@ -1,4 +1,4 @@
-import {add} from "../../../helper_classes/datasource/index";
+import {DBActions} from "../../../helper_classes/datasource/index";
 import {User} from "../../../datasource/entities";
 interface PostBody{
     name: string,
@@ -13,7 +13,8 @@ export async function POST(req: Request) {
             sectors: body.sectors.value.map((el: any) => el.name).join(','),
             agreed_date: new Date()
         }
-        const user = await add(User, postBody);
+        const dbActions: DBActions = DBActions.getInstance();
+        const user = await dbActions.add(User, postBody);
         return Response.json({data: user})
     }catch (e) {
         console.error(e);
