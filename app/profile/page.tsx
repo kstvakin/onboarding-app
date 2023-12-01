@@ -32,6 +32,30 @@ type User = {
     auth: Record<string, any>
 }
 
+type FormValueType = {
+    name: FormValueTypeProps,
+    sectors: FormValueTypeProps
+}
+
+type FormValueTypeProps = {
+    value: string | any[],
+    error: boolean,
+    errorMessage: string
+}
+
+async function loadData(user: User) {
+    const responses = await Promise.all([
+        axios(`/api/users/${user.auth.id}`),
+        axios('/api/sectors')]);
+
+    const response = await Promise.all(responses);
+
+    return {
+        arrayOfUserSectors: arrayOfUserSectors(response),
+        response,
+    };
+}
+
 const Page = () => {
     const router = useRouter();
     const [formValues, setFormValues] = useState<any>({
@@ -62,37 +86,23 @@ const Page = () => {
         if (!user.auth.auth) {
             router.push('/');
         } else {
+            loadData(user)
+                .then((result) => {
+                    setOptions(result.response[1].data.data);
 
-            Promise.all([
-                axios(`/api/users/${user.auth.id}`),
-                axios('/api/sectors')])
-                .then(function (responses) {
-                    Promise.all(responses)
-                        .then(response => {
-
-                            const array_of_sectors: any = arrayOfUserSectors(response);
-
-                            setOptions(response[1].data.data);
-
-                            setFormValues({
-                                ...formValues,
-                                name: {
-                                    ...formValues.name,
-                                    value: response[0].data.data.name
-                                },
-                                sectors: {
-                                    ...formValues.sectors,
-                                    value: array_of_sectors
-                                },
-                            });
-                        })
-                });
+                    setFormValues((prevState: FormValueType) => {
+                        prevState.name.value = result.response[0].data.data.name;
+                        prevState.sectors.value = result.arrayOfUserSectors;
+                        return prevState;
+                    })
+                }).catch(e => console.error(e));
         }
     }, [user])
 
 
     const editFormState = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const {name, value, checked} = event.target as HTMLInputElement;
+        const variableName = name as string;
         setFormValues({
             ...formValues,
             [name]: {
@@ -113,60 +123,74 @@ const Page = () => {
     }
 
     const isValid = (formValues: any) => {
-        const formFields = Object.keys(formValues);
-        let newFormValues = {...formValues};
-        let errorState = true;
+        try {
+            const formFields = Object.keys(formValues);
+            let newFormValues = {...formValues};
+            let errorState = true;
 
-        for (let index = 0; index < formFields.length; index++) {
-            const currentField = formFields[index];
-            const currentValue = formValues[currentField].value;
+            for (let index = 0; index < formFields.length; index++) {
+                const currentField = formFields[index];
+                const currentValue = formValues[currentField].value;
 
-            if (!currentValue || (Array.isArray(currentValue) && currentValue.length === 0)) {
-                newFormValues = {
-                    ...newFormValues,
-                    [currentField]: {
-                        ...newFormValues[currentField],
-                        error: true
+                if (!currentValue || (Array.isArray(currentValue) && currentValue.length === 0)) {
+                    newFormValues = {
+                        ...newFormValues,
+                        [currentField]: {
+                            ...newFormValues[currentField],
+                            error: true
+                        }
                     }
+                    errorState = false;
                 }
-                errorState = false;
             }
+
+            setFormValues(newFormValues);
+
+            return errorState;
+        } catch (e) {
+            console.error(e);
+            return false;
         }
-
-        setFormValues(newFormValues);
-
-        return errorState;
     }
 
     const handleSubmit = async (event: any) => {
-        event.preventDefault();
-        if (!isValid(formValues)) {
-            return false;
-        } else {
-            setEffect({
-                ...effect,
-                loading: true
-            });
-            await fetch(`/api/users/${user.auth.id}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formValues),
-            });
-
-            setEffect({
-                ...effect,
-                loading: false,
-                label: 'updated successfully'
-            });
-
-            setTimeout(() => {
+        try {
+            event.preventDefault();
+            if (!isValid(formValues)) {
+                return false;
+            } else {
                 setEffect({
                     ...effect,
-                    label: ''
+                    loading: true
                 });
-            }, 2500)
+
+                await fetch(`/api/users/${user.auth.id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formValues),
+                });
+
+                setEffect({
+                    ...effect,
+                    loading: false,
+                    label: 'updated successfully'
+                });
+
+                setTimeout(() => {
+                    setEffect({
+                        ...effect,
+                        label: ''
+                    });
+                }, 2500)
+            }
+        } catch (e) {
+            console.error(e);
+            setEffect({
+                ...effect,
+                loading: false
+            });
         }
     }
 

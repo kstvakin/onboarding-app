@@ -28,6 +28,8 @@ export const Card = styled('div')({
     height: '70vh',
 });
 
+
+
 const Page = () => {
     const router = useRouter();
     const dispatch = useAppDispatch();
@@ -84,54 +86,62 @@ const Page = () => {
     }
 
     const isValid = (formValues: any) => {
-        const formFields = Object.keys(formValues);
-        let newFormValues = {...formValues};
-        let errorState = true;
+        try {
+            const formFields = Object.keys(formValues);
+            let newFormValues = {...formValues};
+            let errorState = true;
 
-        for (let index = 0; index < formFields.length; index++) {
-            const currentField = formFields[index];
-            const currentValue = formValues[currentField].value;
+            for (let index = 0; index < formFields.length; index++) {
+                const currentField = formFields[index];
+                const currentValue = formValues[currentField].value;
 
-            if (!currentValue || (Array.isArray(currentValue) && currentValue.length === 0)) {
-                newFormValues = {
-                    ...newFormValues,
-                    [currentField]: {
-                        ...newFormValues[currentField],
-                        error: true
+                if (!currentValue || (Array.isArray(currentValue) && currentValue.length === 0)) {
+                    newFormValues = {
+                        ...newFormValues,
+                        [currentField]: {
+                            ...newFormValues[currentField],
+                            error: true
+                        }
                     }
+                    errorState = false;
                 }
-                errorState = false;
             }
+
+            setFormValues(newFormValues);
+
+            return errorState;
+        }catch (e) {
+            console.error(e);
+            return false;
         }
-
-        setFormValues(newFormValues);
-
-        return errorState;
     }
 
     const handleSubmit = async (event: any) => {
-        event.preventDefault();
-        if (!isValid(formValues)) {
-            return false;
+        try {
+            event.preventDefault();
+            if (!isValid(formValues)) {
+                return false;
+            }
+
+            setLoading(true);
+
+            const res = await fetch('/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formValues),
+            });
+
+            const data: { data: Record<string, any> } = await res.json();
+
+            dispatch(authenticate(data.data.id));
+
+            router.push(`/profile`);
+        }catch (e) {
+            console.error(e);
+            setLoading(false);
         }
-
-        setLoading(true);
-
-        const res = await fetch('/api/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formValues),
-        });
-
-        setLoading(false);
-
-        const data = await res.json();
-
-        dispatch(authenticate(data.data.id));
-
-        router.push(`/profile`);
     }
 
 
