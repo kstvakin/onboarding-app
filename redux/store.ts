@@ -1,4 +1,4 @@
-import {combineReducers, configureStore} from "@reduxjs/toolkit";
+import {combineReducers, configureStore, getDefaultMiddleware} from "@reduxjs/toolkit";
 import userReducer from "./userSlice";
 import { persistReducer } from "redux-persist";
 import storage from "./customStorage";
@@ -15,6 +15,7 @@ const rootReducer = combineReducers({
 
 export const store = configureStore({
     reducer: {rootReducer},
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false})
 });
 
 export type RootState = ReturnType<typeof store.getState>;
