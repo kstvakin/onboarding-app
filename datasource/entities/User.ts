@@ -1,15 +1,32 @@
-import { Model, DataTypes } from "sequelize";
+import {Model, DataTypes, InferAttributes, InferCreationAttributes} from "sequelize";
 import connection from "../data-source";
 
-const initUser = (sequelize: any, Types: any) => {
-    class User extends Model {
+export type UserAttributes = {
+    id: number,
+    name: string,
+    sectors: string,
+    agreed_date: Date
+};
+
+
+const initUser = (sequelize: any) => {
+    class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
+        declare id: number;
+        declare name: string;
+        declare sectors: string;
+        declare agreed_date: Date;
         static associate(models: any) {}
     }
     User.init(
         {
-            name: Types.STRING,
-            sectors: Types.STRING,
-            agreed_date: Types.DATE,
+            id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true
+            },
+            name: DataTypes.STRING,
+            sectors: DataTypes.STRING,
+            agreed_date: DataTypes.DATE
         },
         {
             sequelize,
@@ -20,4 +37,4 @@ const initUser = (sequelize: any, Types: any) => {
     return User;
 };
 
-export default initUser(connection, DataTypes);
+export default initUser(connection);

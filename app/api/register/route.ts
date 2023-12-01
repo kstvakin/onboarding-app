@@ -15,6 +15,7 @@ export async function POST(req: Request) {
         }
         const dbActions: DBActions = DBActions.getInstance();
         const user = await dbActions.add(User, postBody);
+        console.log(user)
         return Response.json({data: user})
     }catch (e) {
         console.error(e);

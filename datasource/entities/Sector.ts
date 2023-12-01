@@ -1,12 +1,18 @@
-import { Model, DataTypes } from "sequelize";
+import {Model, DataTypes} from "sequelize";
 import connection from "../data-source";
 
+export type SectorAttributes = {
+    name: string,
+    id: number
+};
+
 const initSector = (sequelize: any) => {
-    class Sector extends Model {
+    class Sector extends Model<SectorAttributes> {
         static associate(models: any) {
             this.hasMany(models.Field, { as: 'sector', foreignKey: 'sector_id' });
         }
     }
+
     Sector.init(
         {
             id: {

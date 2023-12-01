@@ -1,5 +1,6 @@
 import {DBActions} from "../../../../helper_classes/datasource/index";
 import {User} from "../../../../datasource/entities/index";
+import {UserAttributes} from "../../../../datasource/entities/User";
 interface PostBody{
     name: string,
     sectors: string,
@@ -13,7 +14,7 @@ export async function GET(
     try {
         const userId = params.user;
         const dbActions: DBActions = DBActions.getInstance();
-        const user = await dbActions.findOne(User, {id: userId});
+        const user: UserAttributes = await dbActions.findOne(User, {id: userId});
         return Response.json({data: user})
     }catch (e) {
         console.error(e);
