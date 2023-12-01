@@ -59,9 +59,6 @@ const Page = () => {
 
 
     useEffect(() => {
-
-        console.log('firing')
-
         if (!user.auth.auth) {
             router.push('/');
         } else {
