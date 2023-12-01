@@ -97,7 +97,7 @@ const Page = () => {
                     })
                 }).catch(e => console.error(e));
         }
-    }, [user])
+    }, [user, router])
 
 
     const editFormState = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
