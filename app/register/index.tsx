@@ -17,6 +17,7 @@ import {styled} from "@mui/system";
 import {authenticate} from "../../redux/userSlice";
 import {useAppDispatch} from "../../redux/hooks";
 import axios from "axios";
+import {LoadingButton} from "@mui/lab";
 
 export const Card = styled('div')({
     color: 'darkslategray',
@@ -32,6 +33,8 @@ const Page = () => {
     const dispatch = useAppDispatch();
 
     const [options, setOptions] = useState<any>([]);
+
+    const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         axios(`/api/sectors`)
@@ -112,6 +115,8 @@ const Page = () => {
             return false;
         }
 
+        setLoading(true);
+
         const res = await fetch('/api/register', {
             method: 'POST',
             headers: {
@@ -120,9 +125,11 @@ const Page = () => {
             body: JSON.stringify(formValues),
         });
 
+        setLoading(false);
+
         const data = await res.json();
 
-        dispatch(authenticate(data.data.id))
+        dispatch(authenticate(data.data.id));
 
         router.push(`/profile`);
     }
@@ -214,7 +221,11 @@ const Page = () => {
                                     </FormControl>
                                 </Box>
                                 <Box component="div">
-                                    <Button variant="outlined" type='submit'>Save</Button>
+                                    <LoadingButton
+                                        variant="outlined"
+                                        type='submit'
+                                        loading={loading}
+                                    >Save</LoadingButton>
                                 </Box>
                             </Box>
                         </Grid>

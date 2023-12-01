@@ -7,6 +7,7 @@ import Image from 'next/image';
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {reset} from "../../redux/userSlice";
 import {useRouter} from "next/navigation";
+import {LoadingButton} from "@mui/lab";
 
 
 const arrayOfUserSectors = (arrayOfData: AxiosResponse<any>[]) => {
@@ -21,6 +22,11 @@ const arrayOfUserSectors = (arrayOfData: AxiosResponse<any>[]) => {
 
     return array_of_sectors;
 };
+
+type Effects = {
+    loading: boolean,
+    label: string
+}
 
 const Page = () => {
     const router = useRouter();
@@ -37,7 +43,10 @@ const Page = () => {
         }
     });
 
-    const [label, setLabel] = useState('');
+    const [effect, setEffect] = useState<Effects>({
+        loading: false,
+        label: ''
+    });
 
     const [options, setOptions] = useState([]);
 
@@ -131,7 +140,10 @@ const Page = () => {
         if (!isValid(formValues)) {
             return false;
         } else {
-            setLabel('updating');
+            setEffect({
+                ...effect,
+                loading: true
+            });
             await fetch(`/api/users/${user.auth.id}`, {
                 method: 'POST',
                 headers: {
@@ -140,10 +152,17 @@ const Page = () => {
                 body: JSON.stringify(formValues),
             });
 
-            setLabel('updated successfully');
+            setEffect({
+                ...effect,
+                loading: false,
+                label: 'updated successfully'
+            });
 
             setTimeout(() => {
-                setLabel('');
+                setEffect({
+                    ...effect,
+                    label: ''
+                });
             }, 2500)
         }
     }
@@ -235,23 +254,34 @@ const Page = () => {
                                         }</FormHelperText>
                                     </FormControl>
                                 </Box>
-                                <Box component="div">
-                                    <Button
+                                <Box component="div" sx={{marginBottom:2, position: 'relative'}}>
+                                    <LoadingButton
                                         variant="outlined"
                                         type='submit'
-                                    >Update</Button>
-                                    <Button variant="outlined" onClick={logout}>Logout</Button>
+                                        loading={effect.loading}
+                                        sx={{
+                                            marginRight: 2
+                                        }}
+                                    >
+                                        Update
+                                    </LoadingButton>
+                                    <Button
+                                        variant="outlined"
+                                        onClick={logout}
+                                    >
+                                        Logout
+                                    </Button>
+                                    <Box sx={{position: 'absolute', top: '100%'}}>
+                                        <Typography
+                                            component={"div"}
+                                            fontSize={12}
+                                            color={'darkred'}
+                                            sx={{marginTop: 0.5}}
+                                        >
+                                            {effect.label}
+                                        </Typography>
+                                    </Box>
                                 </Box>
-                            </Box>
-                            <Box>
-                                <Typography
-                                    component={"div"}
-                                    fontSize={12}
-                                    color={'darkred'}
-                                    marginY={2}
-                                >
-                                    {label}
-                                </Typography>
                             </Box>
                         </Grid>
                     </Grid>
