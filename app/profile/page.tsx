@@ -102,7 +102,6 @@ const Page = () => {
 
     const editFormState = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const {name, value, checked} = event.target as HTMLInputElement;
-        const variableName = name as string;
         setFormValues({
             ...formValues,
             [name]: {
@@ -112,7 +111,7 @@ const Page = () => {
         });
     }
 
-    const onChange = (e: any, value: any) => {
+    const changeSectors = (e: any, value: any) => {
         setFormValues({
             ...formValues,
             sectors: {
@@ -141,6 +140,14 @@ const Page = () => {
                         }
                     }
                     errorState = false;
+                }else{
+                    newFormValues = {
+                        ...newFormValues,
+                        [currentField]: {
+                            ...newFormValues[currentField],
+                            error: false
+                        }
+                    }
                 }
             }
 
@@ -251,7 +258,7 @@ const Page = () => {
                                             error={formValues.name.error}
                                             onChange={editFormState}
                                         />
-                                        <FormHelperText>{
+                                        <FormHelperText sx={{marginLeft: 0}}>{
                                             String(formValues.name.error) === 'true' ?
                                                 formValues.name.errorMessage : ''
                                         }</FormHelperText>
@@ -270,11 +277,11 @@ const Page = () => {
                                             options={options}
                                             groupBy={(option) => option.Sector.name}
                                             getOptionLabel={(option) => option.name}
-                                            onChange={onChange}
+                                            onChange={changeSectors}
                                             renderInput={(params) =>
                                                 <TextField {...params} label="Sectors"/>}
                                         />
-                                        <FormHelperText>{
+                                        <FormHelperText sx={{marginLeft: 0}}>{
                                             String(formValues.sectors.error) === 'true' ?
                                                 formValues.sectors.errorMessage : ''
                                         }</FormHelperText>

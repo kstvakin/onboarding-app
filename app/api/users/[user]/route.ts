@@ -1,7 +1,7 @@
-import {DBActions} from "../../../../helper_classes/datasource/index";
 import {User} from "../../../../datasource/entities/index";
 import {UserAttributes} from "../../../../datasource/entities/User";
 import {ApiResponse} from "../../../../helper_classes/apiresponse/index";
+import {UserService} from "../../../../helper_classes/services/controllers/user";
 interface PostBody{
     name: string,
     sectors: string,
@@ -13,9 +13,8 @@ export async function GET(
     { params }: { params: { user: string }}
     ) {
     try {
-        const userId = params.user;
-        const dbActions: DBActions = DBActions.getInstance();
-        const user: UserAttributes = await dbActions.findOne(User, {id: userId});
+        const userService: UserService = UserService.getInstance();
+        const user: UserAttributes = await userService.getOneUser(params.user);
         const apiResponse: ApiResponse = ApiResponse.getInstance();
         return Response.json(apiResponse.success(user))
     }catch (e: any) {
@@ -30,14 +29,8 @@ export async function POST(
     { params }: { params: { user: string }}
 ) {
     try {
-        const {name, sectors} = await req.json();
-        const postBody: PostBody = {
-            name: String(name.value).toLowerCase(),
-            sectors: sectors.value.map((el:any)=> el.name).join(','),
-            id: params.user
-        };
-        const dbActions: DBActions = DBActions.getInstance();
-        await dbActions.edit(User, postBody);
+        const userService: UserService = UserService.getInstance();
+        const postBody: PostBody = await userService.post(req, User, params.user);
         const apiResponse: ApiResponse = ApiResponse.getInstance();
         return Response.json(apiResponse.success(postBody))
     }catch (e: any) {

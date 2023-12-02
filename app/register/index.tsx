@@ -103,6 +103,14 @@ const Page = () => {
                         }
                     }
                     errorState = false;
+                }else{
+                    newFormValues = {
+                        ...newFormValues,
+                        [currentField]: {
+                            ...newFormValues[currentField],
+                            error: false
+                        }
+                    }
                 }
             }
 
@@ -183,7 +191,7 @@ const Page = () => {
                                             name="name"
                                             onChange={updateFormState}
                                         />
-                                        <FormHelperText>
+                                        <FormHelperText sx={{marginLeft: 0}}>
                                             {
                                                 String(formValues.name.error) === 'true' ?
                                                     formValues.name.errorMessage : ''
@@ -205,7 +213,7 @@ const Page = () => {
                                             renderInput={(params) =>
                                                 <TextField {...params} label="Sectors"/>}
                                         />
-                                        <FormHelperText>
+                                        <FormHelperText sx={{marginLeft: 0}}>
                                             {
                                                 String(formValues.sectors.error) === 'true' ?
                                             formValues.sectors.errorMessage : ''
@@ -223,7 +231,7 @@ const Page = () => {
                                                 checked={formValues.terms.value}
                                                 onChange={updateFormState}/>
                                         } label="Agree to terms"/>
-                                        <FormHelperText>{
+                                        <FormHelperText sx={{marginLeft: 0}}>{
                                             String(formValues.terms.error) === 'true' ?
                                                 formValues.terms.errorMessage : ''
                                         }</FormHelperText>

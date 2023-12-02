@@ -1,15 +1,13 @@
-import {Model} from "sequelize";
-
 abstract class IDBActions {
-    abstract add(entity: Model, data: Record<string, any>): any;
+    abstract add(entity: any, data: Record<string, any>): Promise<any>;
 
-    abstract findAllByAssociate(entities: Record<string, Model>): any;
+    abstract findAllByAssociate(entities: Record<string, any>): Promise<any>;
     
-    abstract findOne(entity: Model, query: Record<string, any>): any;
+    abstract findOne(entity: any, query: Record<string, any>): Promise<any>;
     
-    abstract edit(entity: Model, data: Record<string, any>): any;
+    abstract edit(entity: any, data: Record<string, any>): Promise<any>;
 
-    abstract findAll(entity: Model, query: Record<string, any>): any;
+    abstract findAll(entity: any, query: Record<string, any>): Promise<any>;
 }
 
 export class DBActions implements IDBActions {
@@ -18,7 +16,7 @@ export class DBActions implements IDBActions {
         return this.instance;
     }
 
-    async add(entity: any, data: Record<string, any>): Promise<any> {
+    async add(entity: any, data: Record<string, any>):  Promise<any> {
         return entity.create(data);
     }
 

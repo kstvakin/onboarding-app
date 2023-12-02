@@ -1,8 +1,7 @@
-import {InferAttributes, Model} from "sequelize";
-import {IResponse} from "../../app/utilities/intefaces/api_response";
+import {IResponse} from "../../utilities/intefaces/api_response";
 
 abstract class IApiResponse {
-    abstract success(data: any): IResponse;
+    abstract success(data: unknown): IResponse;
 
     abstract error(message: string): IResponse;
 }
