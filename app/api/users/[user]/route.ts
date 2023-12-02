@@ -1,6 +1,7 @@
 import {DBActions} from "../../../../helper_classes/datasource/index";
 import {User} from "../../../../datasource/entities/index";
 import {UserAttributes} from "../../../../datasource/entities/User";
+import {ApiResponse} from "../../../../helper_classes/apiresponse/index";
 interface PostBody{
     name: string,
     sectors: string,
@@ -15,10 +16,12 @@ export async function GET(
         const userId = params.user;
         const dbActions: DBActions = DBActions.getInstance();
         const user: UserAttributes = await dbActions.findOne(User, {id: userId});
-        return Response.json({data: user})
-    }catch (e) {
+        const apiResponse: ApiResponse = ApiResponse.getInstance();
+        return Response.json(apiResponse.success(user))
+    }catch (e: any) {
         console.error(e);
-        return Promise.reject(e);
+        const apiResponse: ApiResponse = ApiResponse.getInstance();
+        return Response.json(apiResponse.error(e.message));
     }
 }
 
@@ -35,9 +38,11 @@ export async function POST(
         };
         const dbActions: DBActions = DBActions.getInstance();
         await dbActions.edit(User, postBody);
-        return Response.json({data: postBody});
-    }catch (e) {
+        const apiResponse: ApiResponse = ApiResponse.getInstance();
+        return Response.json(apiResponse.success(postBody))
+    }catch (e: any) {
         console.error(e);
-        return Promise.reject(e);
+        const apiResponse: ApiResponse = ApiResponse.getInstance();
+        return Response.json(apiResponse.error(e.message));
     }
 }
