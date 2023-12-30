@@ -10,22 +10,11 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- task: DownloadSecureFile@1
-  name: aws_key_pair
-  displayName: 'Download AWS key pair'
-  inputs:
-    secureFile: 'administrator.pem'
-
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: '$(Agent.TempDirectory)'
-    Contents: '**/administrator.pem'
-    TargetFolder: '$(HOME)'
 - task: SSH@0
   inputs:
     sshEndpoint: 'ec2-3-15-154-239.us-east-2'
     runOptions: 'inline'
-    inline: 'echo $HOME'
+    inline: 'docker run -d -p 80:3000 kstvakin/onboarding-app-devops:25'
     readyTimeout: '20000'
 
 
