@@ -14,4 +14,5 @@ steps:
   inputs:
     awsCredentials: 'aws'
     regionName: 'us-east-2'
-    awsCommand: 'sudo docker run -p 80:3000 kstvakin/onboarding-app-devops:25'
+    awsCommand: 'docker'
+    awsSubCommand: 'run -p 80:3000 kstvakin/onboarding-app-devops:25'
