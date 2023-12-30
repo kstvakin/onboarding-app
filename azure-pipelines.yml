@@ -9,12 +9,22 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  tag: '$(Build.BuildId)'
+
 steps:
+- task: Docker@2
+  inputs:
+    containerRegistry: 'dockerhub'
+    repository: 'kstvakin/onboarding-app-devops'
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
+    tags: '$(tag)'
 - task: SSH@0
   inputs:
     sshEndpoint: 'ec2-3-15-154-239.us-east-2'
     runOptions: 'inline'
-    inline: 'docker run -d -p 80:3000 kstvakin/onboarding-app-devops:25'
+    inline: 'docker run -d -p 80:3000 kstvakin/onboarding-app-devops:$(tag)'
     readyTimeout: '20000'
 
 
