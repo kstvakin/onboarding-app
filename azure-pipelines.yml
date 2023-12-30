@@ -17,9 +17,10 @@ steps:
   inputs:
     containerRegistry: 'dockerhub'
     repository: 'kstvakin/onboarding-app-devops'
-    command: 'buildAndPush'
+    command: 'build'
     Dockerfile: '**/Dockerfile'
     tags: '$(tag)'
+    arguments: 'DB_USERNAME=$(DB_USERNAME) DB_PASSWORD=$(DB_PASSWORD) DB_NAME=$(DB_NAME) DB_HOSTNAME=$(DB_HOSTNAME) DB_PORT=$(DB_PORT)'
 - task: SSH@0
   inputs:
     sshEndpoint: 'ec2-3-15-154-239.us-east-2'
