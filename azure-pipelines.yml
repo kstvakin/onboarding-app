@@ -10,7 +10,7 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- task: AWSCLI@1
+- task: AWSPowerShellModuleScript@1
   inputs:
     awsCredentials: 'aws'
     regionName: 'us-east-2'
