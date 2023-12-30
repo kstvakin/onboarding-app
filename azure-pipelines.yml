@@ -17,4 +17,4 @@ steps:
     regionName: 'us-east-2'
     scriptType: 'inline'
     inlineScript: |
-      aws ec2 describe-instances
+      echo $USER
