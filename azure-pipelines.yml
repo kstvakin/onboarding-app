@@ -23,4 +23,4 @@ steps:
     TargetFolder: '$(HOME)'
 - script: |
       cd $HOME
-      ls
+      ssh -i "administrator.pem" ec2-user@ec2-3-15-154-239.us-east-2.compute.amazonaws.com
