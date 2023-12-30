@@ -16,4 +16,4 @@ steps:
     awsCredentials: 'aws'
     regionName: 'us-east-2'
     scriptType: 'inline'
-    inlineScript: 'docker run -p 80:3000 kstvakin/onboarding-app-devops:25'
+    inlineScript: 'docker --version'
