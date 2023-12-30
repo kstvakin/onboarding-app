@@ -1,0 +1,30 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  tag: '$(Build.BuildId)'
+
+steps:
+- task: Docker@2
+  inputs:
+    containerRegistry: 'dockerhub'
+    repository: 'kstvakin/onboarding-app-devops'
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
+    tags: '$(tag)'
+- task: SSH@0
+  inputs:
+    sshEndpoint: 'ec2-3-15-154-239.us-east-2'
+    runOptions: 'inline'
+    inline: 'docker run -d -p -e DB_USERNAME=avnadmin -e DB_PASSWORD=AVNS_Nza7lFkOogE1Nrqt3yr -e DB_NAME=defaultdb -e DB_HOSTNAME=mysql-1c56fa7e-kayodeakinmboni-8441.a.aivencloud.com -e DB_PORT=21132 80:3000 kstvakin/onboarding-app-devops:$(tag)'
+    readyTimeout: '20000'
+
+
