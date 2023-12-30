@@ -22,4 +22,4 @@ steps:
     Contents: '**/administrator.pem'
     TargetFolder: '$(HOME)'
 - script: |
-      ssh -i "administrator.pem" ec2-user@ec2-3-15-154-239.us-east-2.compute.amazonaws.com
+      ssh -i "$(HOME)/administrator.pem" ec2-user@ec2-3-15-154-239.us-east-2.compute.amazonaws.com
