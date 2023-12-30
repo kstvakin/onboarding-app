@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 COPY package*.json ./
-COPY package-lock.json ./
+#COPY package-lock.json ./
 
 
 # Install app dependencies
