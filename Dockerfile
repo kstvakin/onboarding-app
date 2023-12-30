@@ -15,6 +15,18 @@ RUN npm ci
 # Bundle app source
 COPY . .
 
+ARG DB_USERNAME
+ARG DB_PASSWORD
+ARG DB_NAME
+ARG DB_HOSTNAME
+ARG DB_PORT
+
+ENV DB_USERNAME=$DB_USERNAME
+ENV DB_PASSWORD=$DB_PASSWORD
+ENV DB_NAME=$DB_NAME
+ENV DB_HOSTNAME=$DB_HOSTNAME
+ENV DB_PORT=$DB_PORT
+
 # Creates a "dist" folder with the production build
 RUN npm run build
 
