@@ -29,8 +29,7 @@ stages:
             SourceFolder: '$(Agent.TempDirectory)'
             Contents: '**/Dockerfile'
             TargetFolder: '$(HOME)'
-        - bash: cd $(Agent.TempDirectory)
-        - bash: ls
+        - bash: ls $(Agent.TempDirectory)
 #        - task: Docker@2
 #          inputs:
 #            containerRegistry: 'dockerhub'
