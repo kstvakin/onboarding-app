@@ -10,8 +10,6 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  - name: tag
-    value: '$(Build.BuildId)'
   - group: onboarding-app
 stages:
   - stage: Build
@@ -24,7 +22,7 @@ stages:
           repository: 'kstvakin/onboarding-app-devops'
           command: 'build'
           Dockerfile: '**/Dockerfile'
-          tags: '$(tag)'
+          tags: 'release'
           arguments: '--build-arg DB_PASSWORD=$(DB_PASSWORD)'
       - task: Docker@2
         inputs:
@@ -44,8 +42,7 @@ stages:
                 inputs:
                   sshEndpoint: 'us-east-2'
                   runOptions: 'inline'
-                  inline: 'docker run -d -p 80:3000 --name=onboarding-app kstvakin/onboarding-app-devops:$(tag)'
+                  inline: 'docker run -d -p 80:3000 --name=onboarding-app kstvakin/onboarding-app-devops:release'
                   readyTimeout: '20000'
-              - bash: echo deployment completed
 
 
