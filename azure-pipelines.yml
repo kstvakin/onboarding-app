@@ -16,7 +16,7 @@ variables:
 stages:
   - stage: Build
     jobs:
-    - job: Build-Image
+    - job: Build_Image
       steps:
       - task: Docker@2
         inputs:
@@ -26,7 +26,7 @@ stages:
           Dockerfile: '**/Dockerfile'
           tags: '$(tag)'
           arguments: '--build-arg DB_PASSWORD=$(DB_PASSWORD)'
-    - job: Push-Image
+    - job: Push_Image
       steps:
       - task: Docker@2
         inputs:
@@ -35,7 +35,7 @@ stages:
           command: 'push'
   - stage: Deploy
     jobs:
-    - job: Deploy-Image
+    - job: Deploy_Image
       steps:
       - task: SSH@0
         inputs:
