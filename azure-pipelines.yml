@@ -11,9 +11,18 @@ pool:
 
 variables:
   -group: onboarding-app
+  tag: "hello"
 
 steps:
-- script: echo $(DB_PASSWORD)
+- script: echo $(tag)
+#- task: Docker@2
+#  inputs:
+#    containerRegistry: 'dockerhub'
+#    repository: 'kstvakin/onboarding-app-devops'
+#    command: 'build'
+#    Dockerfile: '**/Dockerfile'
+#    tags: '$(tag)'
+#    arguments: '--build-arg DB_PASSWORD=$(DB_PASSWORD)'
 #- task: SSH@0
 #  inputs:
 #    sshEndpoint: 'ec2-3-15-154-239.us-east-2'
