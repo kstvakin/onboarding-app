@@ -22,7 +22,8 @@ steps:
     command: 'build'
     Dockerfile: '**/Dockerfile'
     tags: '$(tag)'
-    arguments: '--build-arg DB_PASSWORD=$(DB_PASSWORD)'
+    arguments: |
+    '--build-arg DB_PASSWORD=$(DB_PASSWORD)'
 #- task: SSH@0
 #  inputs:
 #    sshEndpoint: 'ec2-3-15-154-239.us-east-2'
