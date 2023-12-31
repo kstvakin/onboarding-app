@@ -19,13 +19,18 @@ stages:
     - job: Build_And_Push_Image
       steps:
         - task: Docker@2
+            inputs:
+              containerRegistry: 'dockerhub'
+              repository: 'kstvakin/onboarding-app-devops'
+              command: 'build'
+              Dockerfile: '**/Dockerfile'
+              tags: 'release'
+              arguments: '--build-arg DB_PASSWORD=$(DB_PASSWORD)'
+        - task: Docker@2
           inputs:
             containerRegistry: 'dockerhub'
             repository: 'kstvakin/onboarding-app-devops'
-            command: 'buildAndPush'
-            Dockerfile: '$(System.DefaultWorkingDirectory)/Dockerfile'
-            arguments: '--build-arg DB_PASSWORD=$(DB_PASSWORD)'
-            tags: 'release'
+            command: 'push'
 #  - stage: Deploy
 #    dependsOn: Build
 #    jobs:
