@@ -35,7 +35,7 @@ stages:
             containerRegistry: 'dockerhub'
             repository: 'kstvakin/onboarding-app-devops'
             command: 'build'
-            Dockerfile: '$(HOME)/Prod-Dockerfile'
+            Dockerfile: '$(System.DefaultWorkingDirectory)/Prod-Dockerfile'
             tags: '$(tag)'
 #        - task: Docker@2
 #          inputs:
