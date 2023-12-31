@@ -14,13 +14,13 @@ variables:
   -group: onboarding-app
 
 steps:
-- task: Docker@2
-  inputs:
-    containerRegistry: 'dockerhub'
-    repository: 'kstvakin/onboarding-app-devops'
-    command: 'build'
-    Dockerfile: '**/Dockerfile'
-    tags: '$(tag)'
+#- task: Docker@2
+#  inputs:
+#    containerRegistry: 'dockerhub'
+#    repository: 'kstvakin/onboarding-app-devops'
+#    command: 'build'
+#    Dockerfile: '**/Dockerfile'
+#    tags: '$(tag)'
 #- task: SSH@0
 #  inputs:
 #    sshEndpoint: 'ec2-3-15-154-239.us-east-2'
@@ -28,6 +28,6 @@ steps:
 #    inline: 'docker run -d -p 80:3000 kstvakin/onboarding-app-devops:25'
 #    readyTimeout: '20000'
 - script: |
-    "echo $(DB_USERNAME)"
+    echo $(DB_USERNAME)
 
 
