@@ -27,9 +27,9 @@ stages:
         - task: CopyFiles@2
           inputs:
             SourceFolder: '$(Agent.TempDirectory)'
-            Contents: '**/Dockerfile'
+            Contents: '**/Prod-Dockerfile'
             TargetFolder: '$(HOME)'
-        - bash: ls $(Agent.TempDirectory)
+        - bash: ls $(HOME)
 #        - task: Docker@2
 #          inputs:
 #            containerRegistry: 'dockerhub'
