@@ -14,7 +14,7 @@ variables:
   tag: "hello"
 
 steps:
-- script: echo $(variables.DB_PASSWORD)
+- script: echo $(DB_PASSWORD)
 #- task: Docker@2
 #  inputs:
 #    containerRegistry: 'dockerhub'
