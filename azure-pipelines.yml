@@ -32,12 +32,6 @@ steps:
   inputs:
     sshEndpoint: 'us-east-2'
     runOptions: 'inline'
-    inline: 'docker kill onboarding-app'
-    readyTimeout: '20000'
-- task: SSH@0
-  inputs:
-    sshEndpoint: 'us-east-2'
-    runOptions: 'inline'
     inline: 'docker run -d -p 80:3000 --name=onboarding-app kstvakin/onboarding-app-devops:$(tag)'
     readyTimeout: '20000'
 
