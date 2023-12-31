@@ -34,14 +34,18 @@ stages:
   - stage: Deploy
     dependsOn: Build
     jobs:
-      - job: Deploy_Image
-        steps:
-        - task: SSH@0
-          inputs:
-            sshEndpoint: 'us-east-2'
-            runOptions: 'inline'
-            inline: 'docker run -d -p 80:3000 --name=onboarding-app kstvakin/onboarding-app-devops:$(tag)'
-            readyTimeout: '20000'
-        - bash: echo deployment completed
+      - deployment: Deploy_Image
+        environment: Prod
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+              - task: SSH@0
+                inputs:
+                  sshEndpoint: 'us-east-2'
+                  runOptions: 'inline'
+                  inline: 'docker run -d -p 80:3000 --name=onboarding-app kstvakin/onboarding-app-devops:$(tag)'
+                  readyTimeout: '20000'
+              - bash: echo deployment completed
 
 
