@@ -10,8 +10,7 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  -group: onboarding-app
-  tag: "hello"
+  - group: onboarding-app
 
 steps:
 - script: echo $(DB_PASSWORD)
