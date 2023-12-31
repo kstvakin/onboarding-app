@@ -11,6 +11,7 @@ pool:
 
 variables:
   tag: '$(Build.BuildId)'
+  -group: onboarding-app
 
 steps:
 - task: Docker@2
@@ -20,12 +21,13 @@ steps:
     command: 'build'
     Dockerfile: '**/Dockerfile'
     tags: '$(tag)'
-    arguments: 'DB_USERNAME=$(DB_USERNAME) DB_PASSWORD=$(DB_PASSWORD) DB_NAME=$(DB_NAME) DB_HOSTNAME=$(DB_HOSTNAME) DB_PORT=$(DB_PORT)'
-- task: SSH@0
-  inputs:
-    sshEndpoint: 'ec2-3-15-154-239.us-east-2'
-    runOptions: 'inline'
-    inline: 'docker run -d -p 80:3000 kstvakin/onboarding-app-devops:25'
-    readyTimeout: '20000'
+#- task: SSH@0
+#  inputs:
+#    sshEndpoint: 'ec2-3-15-154-239.us-east-2'
+#    runOptions: 'inline'
+#    inline: 'docker run -d -p 80:3000 kstvakin/onboarding-app-devops:25'
+#    readyTimeout: '20000'
+- script: |
+    "echo $(DB_USERNAME)"
 
 
