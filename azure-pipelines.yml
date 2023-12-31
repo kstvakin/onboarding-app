@@ -10,8 +10,9 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
+  - name: tag
+    value: '$(Build.BuildId)'
   - group: onboarding-app
-    tag: '$(Build.BuildId)'
 
 steps:
 - script: echo $(DB_PASSWORD)
