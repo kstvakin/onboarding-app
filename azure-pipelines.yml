@@ -42,5 +42,6 @@ stages:
             runOptions: 'inline'
             inline: 'docker run -d -p 80:3000 --name=onboarding-app kstvakin/onboarding-app-devops:$(tag)'
             readyTimeout: '20000'
+        - script: echo deployment completed
 
 
