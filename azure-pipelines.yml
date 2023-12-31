@@ -13,26 +13,29 @@ variables:
   - name: tag
     value: '$(Build.BuildId)'
   - group: onboarding-app
-
-steps:
-- task: Docker@2
-  inputs:
-    containerRegistry: 'dockerhub'
-    repository: 'kstvakin/onboarding-app-devops'
-    command: 'build'
-    Dockerfile: '**/Dockerfile'
-    tags: '$(tag)'
-    arguments: '--build-arg DB_PASSWORD=$(DB_PASSWORD)'
-- task: Docker@2
-  inputs:
-    containerRegistry: 'dockerhub'
-    repository: 'kstvakin/onboarding-app-devops'
-    command: 'push'
-- task: SSH@0
-  inputs:
-    sshEndpoint: 'us-east-2'
-    runOptions: 'inline'
-    inline: 'docker run -d -p 80:3000 --name=onboarding-app kstvakin/onboarding-app-devops:$(tag)'
-    readyTimeout: '20000'
+stages:
+  - stage: Build
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'dockerhub'
+        repository: 'kstvakin/onboarding-app-devops'
+        command: 'build'
+        Dockerfile: '**/Dockerfile'
+        tags: '$(tag)'
+        arguments: '--build-arg DB_PASSWORD=$(DB_PASSWORD)'
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'dockerhub'
+        repository: 'kstvakin/onboarding-app-devops'
+        command: 'push'
+  - stage: Deploy
+      steps:
+      - task: SSH@0
+        inputs:
+          sshEndpoint: 'us-east-2'
+          runOptions: 'inline'
+          inline: 'docker run -d -p 80:3000 --name=onboarding-app kstvakin/onboarding-app-devops:$(tag)'
+          readyTimeout: '20000'
 
 
