@@ -11,6 +11,7 @@ pool:
 
 variables:
   - group: onboarding-app
+    tag: '$(Build.BuildId)'
 
 steps:
 - script: echo $(DB_PASSWORD)
