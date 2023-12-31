@@ -31,6 +31,7 @@ stages:
             containerRegistry: 'dockerhub'
             repository: 'kstvakin/onboarding-app-devops'
             command: 'push'
+            tags: 'release'
 #  - stage: Deploy
 #    dependsOn: Build
 #    jobs:
