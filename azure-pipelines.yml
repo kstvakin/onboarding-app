@@ -41,17 +41,17 @@ stages:
           runOnce:
             deploy:
               steps:
-                - task: DownloadSecureFile@1
-                  name: aws_key_pair
-                  displayName: 'Download AWS key pair'
-                  inputs:
-                    secureFile: 'administrator.pem'
+              - task: DownloadSecureFile@1
+                name: aws_key_pair
+                displayName: 'Download AWS key pair'
+                inputs:
+                  secureFile: 'administrator.pem'
 
-                - task: CopyFiles@2
-                  inputs:
-                    SourceFolder: '$(Agent.TempDirectory)'
-                    Contents: '**/administrator.pem'
-                    TargetFolder: '$(HOME)'
+              - task: CopyFiles@2
+                inputs:
+                  SourceFolder: '$(Agent.TempDirectory)'
+                  Contents: '**/administrator.pem'
+                  TargetFolder: '$(HOME)'
 
               - bash: scp -i $(HOME)/administrator.pem $(System.ArtifactsDirectory)/docker-compose.yml ec2-user@172.60.58.99:home/ec2-user
 
