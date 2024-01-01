@@ -24,7 +24,7 @@ stages:
               sshEndpoint: 'us-east-2'
               sourceFolder: '$(System.DefaultWorkingDirectory)'
               contents: '**/docker-compose.yml'
-              targetFolder: '$(HOME)'
+              targetFolder: '/home/ec2-user'
               readyTimeout: '20000'
 #         - task: Docker@2
 #           inputs:
