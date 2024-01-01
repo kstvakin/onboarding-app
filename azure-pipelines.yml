@@ -44,8 +44,9 @@ stages:
               - task: SSH@0
                 inputs:
                   sshEndpoint: 'us-east-2'
-                  runOptions: 'inline'
-                  inline: 'docker stack deploy -c docker-compose.yml onboarding-app-stack'
+                  scriptType: 'bash'
+                  scriptInline: |
+                    # Run multiple commands using ';' as a separator
+                    echo "Running Command 1"
+                    command1 ; command2 ; command3
                   readyTimeout: '20000'
-
-
