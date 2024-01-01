@@ -53,6 +53,7 @@ stages:
                   Contents: '**/administrator.pem'
                   TargetFolder: '$(HOME)'
 
+              - bash: ls '$(System.DefaultWorkingDirectory)'
               - task: CopyFilesOverSSH@0
                 inputs:
                   sshEndpoint: 'us-east-2'
