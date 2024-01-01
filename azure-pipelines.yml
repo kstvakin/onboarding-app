@@ -58,7 +58,7 @@ stages:
                   sshEndpoint: 'us-east-2'
                   sourceFolder: '$(System.ArtifactsDirectory)'
                   contents: '**/docker-compose.yml'
-                  targetFolder: '$(HOME)'
+                  targetFolder: '/home/ec2-user'
                   readyTimeout: '20000'
 
 #              - task: SSH@0
