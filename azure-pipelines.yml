@@ -14,53 +14,54 @@ variables:
     value: '$(Build.BuildId)'
   - group: onboarding-app
 stages:
-  # - stage: Build
-  #   jobs:
-  #   - job: Build_And_Push_Image
-  #     steps:
-  #       - task: Docker@2
-  #         inputs:
-  #           containerRegistry: 'dockerhub'
-  #           repository: 'kstvakin/onboarding-app-devops'
-  #           command: 'build'
-  #           Dockerfile: '**/Dockerfile'
-  #           tags: 'release'
-  #           arguments: '--build-arg DB_PASSWORD=$(DB_PASSWORD)'
-  #       - task: Docker@2
-  #         inputs:
-  #           containerRegistry: 'dockerhub'
-  #           repository: 'kstvakin/onboarding-app-devops'
-  #           command: 'push'
-  #           tags: 'release'
-  - stage: Deploy
-    # dependsOn: Build
-    jobs:
-      - deployment: Deploy_Image
-        environment: Prod
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-              - task: DownloadSecureFile@1
-                name: aws_key_pair
-                displayName: 'Download AWS key pair'
-                inputs:
-                  secureFile: 'administrator.pem'
-
-              - task: CopyFiles@2
-                inputs:
-                  SourceFolder: '$(Agent.TempDirectory)'
-                  Contents: '**/administrator.pem'
-                  TargetFolder: '$(HOME)'
-
-              - bash: ls '$(System.DefaultWorkingDirectory)'
-              - task: CopyFilesOverSSH@0
-                inputs:
-                  sshEndpoint: 'us-east-2'
-                  sourceFolder: '$(System.DefaultWorkingDirectory)'
-                  contents: '**/docker-compose.yml'
-                  targetFolder: '$(HOME)'
-                  readyTimeout: '20000'
+   - stage: Build
+     jobs:
+     - job: Build_And_Push_Image
+       steps:
+          - bash: ls '$(System.DefaultWorkingDirectory)'
+#         - task: Docker@2
+#           inputs:
+#             containerRegistry: 'dockerhub'
+#             repository: 'kstvakin/onboarding-app-devops'
+#             command: 'build'
+#             Dockerfile: '**/Dockerfile'
+#             tags: 'release'
+#             arguments: '--build-arg DB_PASSWORD=$(DB_PASSWORD)'
+#         - task: Docker@2
+#           inputs:
+#             containerRegistry: 'dockerhub'
+#             repository: 'kstvakin/onboarding-app-devops'
+#             command: 'push'
+#             tags: 'release'
+#  - stage: Deploy
+#    # dependsOn: Build
+#    jobs:
+#      - deployment: Deploy_Image
+#        environment: Prod
+#        strategy:
+#          runOnce:
+#            deploy:
+#              steps:
+#              - task: DownloadSecureFile@1
+#                name: aws_key_pair
+#                displayName: 'Download AWS key pair'
+#                inputs:
+#                  secureFile: 'administrator.pem'
+#
+#              - task: CopyFiles@2
+#                inputs:
+#                  SourceFolder: '$(Agent.TempDirectory)'
+#                  Contents: '**/administrator.pem'
+#                  TargetFolder: '$(HOME)'
+#
+#
+#              - task: CopyFilesOverSSH@0
+#                inputs:
+#                  sshEndpoint: 'us-east-2'
+#                  sourceFolder: '$(System.DefaultWorkingDirectory)'
+#                  contents: '**/docker-compose.yml'
+#                  targetFolder: '$(HOME)'
+#                  readyTimeout: '20000'
 
 #              - task: SSH@0
 #                inputs:
