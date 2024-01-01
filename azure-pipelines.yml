@@ -20,12 +20,12 @@ stages:
        steps:
           - bash: ls '$(System.DefaultWorkingDirectory)'
           - task: CopyFilesOverSSH@0
-             inputs:
-               sshEndpoint: 'us-east-2'
-               sourceFolder: '$(System.DefaultWorkingDirectory)'
-               contents: '**/docker-compose.yml'
-               targetFolder: '$(HOME)'
-               readyTimeout: '20000'
+            inputs:
+              sshEndpoint: 'us-east-2'
+              sourceFolder: '$(System.DefaultWorkingDirectory)'
+              contents: '**/docker-compose.yml'
+              targetFolder: '$(HOME)'
+              readyTimeout: '20000'
 #         - task: Docker@2
 #           inputs:
 #             containerRegistry: 'dockerhub'
