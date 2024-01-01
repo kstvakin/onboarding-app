@@ -55,10 +55,10 @@ stages:
 
               - bash: scp -i $(HOME)/administrator.pem $(System.ArtifactsDirectory)/docker-compose.yml ec2-user@18.117.163.46:home/ec2-user
 
-              - task: SSH@0
-                inputs:
-                  sshEndpoint: 'us-east-2'
-                  runOptions: 'inline'
-                  inline: |
-                    echo testing
-                  readyTimeout: '20000'
+#              - task: SSH@0
+#                inputs:
+#                  sshEndpoint: 'us-east-2'
+#                  runOptions: 'inline'
+#                  inline: |
+#                    echo testing
+#                  readyTimeout: '20000'
