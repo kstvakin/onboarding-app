@@ -14,26 +14,26 @@ variables:
     value: '$(Build.BuildId)'
   - group: onboarding-app
 stages:
-  - stage: Build
-    jobs:
-    - job: Build_And_Push_Image
-      steps:
-        - task: Docker@2
-          inputs:
-            containerRegistry: 'dockerhub'
-            repository: 'kstvakin/onboarding-app-devops'
-            command: 'build'
-            Dockerfile: '**/Dockerfile'
-            tags: 'release'
-            arguments: '--build-arg DB_PASSWORD=$(DB_PASSWORD)'
-        - task: Docker@2
-          inputs:
-            containerRegistry: 'dockerhub'
-            repository: 'kstvakin/onboarding-app-devops'
-            command: 'push'
-            tags: 'release'
+  # - stage: Build
+  #   jobs:
+  #   - job: Build_And_Push_Image
+  #     steps:
+  #       - task: Docker@2
+  #         inputs:
+  #           containerRegistry: 'dockerhub'
+  #           repository: 'kstvakin/onboarding-app-devops'
+  #           command: 'build'
+  #           Dockerfile: '**/Dockerfile'
+  #           tags: 'release'
+  #           arguments: '--build-arg DB_PASSWORD=$(DB_PASSWORD)'
+  #       - task: Docker@2
+  #         inputs:
+  #           containerRegistry: 'dockerhub'
+  #           repository: 'kstvakin/onboarding-app-devops'
+  #           command: 'push'
+  #           tags: 'release'
   - stage: Deploy
-    dependsOn: Build
+    # dependsOn: Build
     jobs:
       - deployment: Deploy_Image
         environment: Prod
@@ -44,9 +44,7 @@ stages:
               - task: SSH@0
                 inputs:
                   sshEndpoint: 'us-east-2'
-                  scriptType: 'bash'
-                  scriptInline: |
-                    # Run multiple commands using ';' as a separator
-                    echo "Running Command 1"
-                    command1 ; command2 ; command3
+                  runOptions: 'commands'
+                  commands: |
+                    echo hello;echo testing
                   readyTimeout: '20000'
