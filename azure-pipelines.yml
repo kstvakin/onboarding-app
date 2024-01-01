@@ -46,5 +46,5 @@ stages:
                   sshEndpoint: 'us-east-2'
                   runOptions: 'commands'
                   commands: |
-                    echo 'hello' ; echo 'testing'
+                    echo hello;echo testing
                   readyTimeout: '20000'
