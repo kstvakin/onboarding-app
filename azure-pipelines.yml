@@ -44,7 +44,6 @@ stages:
               - task: SSH@0
                 inputs:
                   sshEndpoint: 'us-east-2'
-                  runOptions: 'commands'
-                  commands: |
-                    echo hello;echo testing
+                  runOptions: 'script'
+                  scriptPath: '$(System.ArtifactsDirectory)'
                   readyTimeout: '20000'
