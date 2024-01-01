@@ -26,43 +26,33 @@ stages:
               contents: '**/docker-compose.yml'
               targetFolder: '/home/ec2-user'
               readyTimeout: '20000'
-#         - task: Docker@2
-#           inputs:
-#             containerRegistry: 'dockerhub'
-#             repository: 'kstvakin/onboarding-app-devops'
-#             command: 'build'
-#             Dockerfile: '**/Dockerfile'
-#             tags: 'release'
-#             arguments: '--build-arg DB_PASSWORD=$(DB_PASSWORD)'
-#         - task: Docker@2
-#           inputs:
-#             containerRegistry: 'dockerhub'
-#             repository: 'kstvakin/onboarding-app-devops'
-#             command: 'push'
-#             tags: 'release'
-#  - stage: Deploy
-#    # dependsOn: Build
-#    jobs:
-#      - deployment: Deploy_Image
-#        environment: Prod
-#        strategy:
-#          runOnce:
-#            deploy:
-#              steps:
-#
-#
-#              - task: CopyFilesOverSSH@0
-#                inputs:
-#                  sshEndpoint: 'us-east-2'
-#                  sourceFolder: '$(System.DefaultWorkingDirectory)'
-#                  contents: '**/docker-compose.yml'
-#                  targetFolder: '$(HOME)'
-#                  readyTimeout: '20000'
-
-#              - task: SSH@0
-#                inputs:
-#                  sshEndpoint: 'us-east-2'
-#                  runOptions: 'inline'
-#                  inline: |
-#                    echo testing
-#                  readyTimeout: '20000'
+         - task: Docker@2
+           inputs:
+             containerRegistry: 'dockerhub'
+             repository: 'kstvakin/onboarding-app-devops'
+             command: 'build'
+             Dockerfile: '**/Dockerfile'
+             tags: 'release'
+             arguments: '--build-arg DB_PASSWORD=$(DB_PASSWORD)'
+         - task: Docker@2
+           inputs:
+             containerRegistry: 'dockerhub'
+             repository: 'kstvakin/onboarding-app-devops'
+             command: 'push'
+             tags: 'release'
+  - stage: Deploy
+    dependsOn: Build
+    jobs:
+      - deployment: Deploy_Image
+        environment: Prod
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+              - task: SSH@0
+                inputs:
+                  sshEndpoint: 'us-east-2'
+                  runOptions: 'inline'
+                  inline: |
+                    docker stack deploy -c /home/ec2-user/docker-compose.yml docker-zero
+                  readyTimeout: '20000'
