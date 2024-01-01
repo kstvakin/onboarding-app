@@ -53,7 +53,7 @@ stages:
                   Contents: '**/administrator.pem'
                   TargetFolder: '$(HOME)'
 
-              - bash: scp -i $(HOME)/administrator.pem $(System.ArtifactsDirectory)/docker-compose.yml ec2-user@172.60.58.99:home/ec2-user
+              - bash: scp -i $(HOME)/administrator.pem $(System.ArtifactsDirectory)/docker-compose.yml ec2-user@18.117.163.46:home/ec2-user
 
               - task: SSH@0
                 inputs:
