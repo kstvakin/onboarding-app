@@ -47,4 +47,5 @@ stages:
                   runOptions: 'inline'
                   inline: |
                     echo hello
+                    echo testing
                   readyTimeout: '20000'
