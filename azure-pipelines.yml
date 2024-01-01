@@ -56,9 +56,9 @@ stages:
               - task: CopyFilesOverSSH@0
                 inputs:
                   sshEndpoint: 'us-east-2'
-                  sourceFolder: '$(System.ArtifactsDirectory)'
+                  sourceFolder: '$(System.DefaultWorkingDirectory)'
                   contents: '**/docker-compose.yml'
-                  targetFolder: '/home/ec2-user'
+                  targetFolder: '$(HOME)'
                   readyTimeout: '20000'
 
 #              - task: SSH@0
