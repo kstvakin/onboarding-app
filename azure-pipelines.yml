@@ -60,6 +60,5 @@ stages:
                   sshEndpoint: 'us-east-2'
                   runOptions: 'inline'
                   inline: |
-                    docker swarm init
                     echo testing
                   readyTimeout: '20000'
