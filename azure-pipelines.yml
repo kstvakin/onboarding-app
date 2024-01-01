@@ -44,6 +44,7 @@ stages:
               - task: SSH@0
                 inputs:
                   sshEndpoint: 'us-east-2'
-                  runOptions: 'script'
-                  scriptPath: '$(System.ArtifactsDirectory)'
+                  runOptions: 'inline'
+                  inline: |
+                    echo hello
                   readyTimeout: '20000'
