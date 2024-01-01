@@ -16,7 +16,7 @@ variables:
 stages:
    - stage: Build
      jobs:
-     - job: Build_And_Push_Image
+     - job: Build
        steps:
           - bash: ls '$(System.DefaultWorkingDirectory)'
           - task: CopyFilesOverSSH@0
@@ -44,7 +44,7 @@ stages:
    - stage: Deploy
      dependsOn: Build
      jobs:
-        - deployment: Deploy_Image
+        - deployment: Deploy
           environment: Prod
           strategy:
             runOnce:
