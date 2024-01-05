@@ -55,5 +55,5 @@ stages:
                     sshEndpoint: 'us-east-2'
                     runOptions: 'inline'
                     inline: |
-                      docker stack deploy -c /home/ec2-user/docker-compose.yml docker-zero
+                      sudo docker stack deploy -c /home/ec2-user/docker-compose.yml docker-zero
                     readyTimeout: '20000'
